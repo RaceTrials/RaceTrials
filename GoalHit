@@ -1,0 +1,70 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class GoalHit : MonoBehaviour
+{
+    public int goalpostIndex;
+    private Timer timer;
+    private bool hasBeenHit = false;
+    private static int goalsHit = 0;
+    private bool canIncrementTime = true;
+    private bool finalGoalHit = false;
+    public GameObject finalUIElement;
+    public Canvas can;
+    public Canvas canNew;
+    public 
+    void Start(){
+        timer = FindObjectOfType<Timer>();
+
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if ((other.CompareTag("Player") || other.CompareTag("Player2")) && !hasBeenHit)
+        {
+            if (canIncrementTime && !IsFinalGoal())
+            {
+                timer.elapsedTime += 9.0f;
+            }
+
+            hasBeenHit = true;
+            CheckAndUpdateGoals();
+        }
+    }
+
+    private void CheckAndUpdateGoals()
+    {
+        goalsHit++;
+
+        Debug.Log("Goals Hit: " + goalsHit);
+
+        if (IsFinalGoal())
+        {
+            if (goalsHit == 1)
+            {
+                goalsHit = 0;
+                return;
+            }
+            else if (!finalGoalHit)
+            {
+                finalGoalHit = true;
+                canIncrementTime = false;  // Stop incrementing time when final goal is hit
+            }
+        }
+
+        if (goalsHit >= 5 && finalGoalHit)
+        {
+            Debug.Log("You won!");
+            timer.elapsedTime += 1000;
+            can.gameObject.SetActive(false);
+            canNew.gameObject.SetActive(true);
+
+        }
+    }
+
+    private bool IsFinalGoal()
+    {
+        return gameObject.CompareTag("FinalGoal");
+    }
+}
