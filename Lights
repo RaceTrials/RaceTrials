@@ -1,0 +1,27 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Lights : MonoBehaviour
+{
+    public bool isSKeyPressed = false;
+    void Start()
+    {
+    }
+
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.S))
+        {
+            if (!isSKeyPressed)
+            {
+                // Work in progress
+                isSKeyPressed = true;
+            }
+        }
+        else
+        {
+            isSKeyPressed = false;
+        }
+    }
+}
