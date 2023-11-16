@@ -1,0 +1,85 @@
+using UnityEngine;
+
+public class CarMovement : MonoBehaviour
+{
+    public float acceleration = 5f;
+    public float deceleration = 2f;
+    public float maxSpeed = 10f;
+    public float turnSpeed = 2f;
+
+    private float currentSpeed = 0f;
+
+    void Update()
+    {
+        HandleInput();
+    }
+
+    void HandleInput()
+    {
+        // Accelerate
+        if (Input.GetKey(KeyCode.W))
+        {
+            Accelerate();
+        }
+        // Decelerate
+        else if (Input.GetKey(KeyCode.S))
+        {
+            Decelerate();
+        }
+        // No input, gradually slow down
+        else
+        {
+            SlowDown();
+        }
+
+        // Turn left
+        if (Input.GetKey(KeyCode.A))
+        {
+            TurnLeft();
+        }
+        // Turn right
+        else if (Input.GetKey(KeyCode.D))
+        {
+            TurnRight();
+        }
+    }
+
+    void Accelerate()
+    {
+        currentSpeed += acceleration * Time.deltaTime;
+        currentSpeed = Mathf.Clamp(currentSpeed, 0f, maxSpeed);
+        Move();
+    }
+
+    void Decelerate()
+    {
+        currentSpeed -= deceleration * Time.deltaTime;
+        currentSpeed = Mathf.Clamp(currentSpeed, 0f, maxSpeed);
+        Move();
+    }
+
+    void SlowDown()
+    {
+        if (currentSpeed > 0f)
+        {
+            currentSpeed -= deceleration * Time.deltaTime;
+            currentSpeed = Mathf.Max(0f, currentSpeed);
+            Move();
+        }
+    }
+
+    void TurnLeft()
+    {
+        transform.Rotate(Vector3.up, -turnSpeed * Time.deltaTime);
+    }
+
+    void TurnRight()
+    {
+        transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime);
+    }
+
+    void Move()
+    {
+        transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
+    }
+}
